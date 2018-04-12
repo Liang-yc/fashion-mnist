@@ -5,11 +5,50 @@
 构建的网络模型包含五个卷积层和3个全连接层，网络各层参数见下表：
 <br>
 <table>
-<thead><tr><th>名称</th><th>特征图数量</th><th>核大小</th><th>说明</th></tr></thead>
+<thead><tr><th>名称</th><th>特征图大小</th><th>说明</th></tr></thead>
         <tr>
             <td>输入图像</td>
             <td>28x28x1</td>
             <td>/</td>
+        </tr>
+         <tr>
+            <td>conv1</td>
+            <td>28x28x64</td>
+            <td>/</td>
+        </tr>
+         <tr>
+            <td>conv2</td>
+            <td>28x28x64</td>
+            <td>/</td>
+        </tr>
+         <tr>
+            <td>conv3</td>
+            <td>14x14x64</td>
+            <td>/</td>
+        </tr>
+         <tr>
+            <td>conv4</td>
+            <td>14x14x64</td>
+            <td>/</td>
+        </tr>
+         <tr>
+            <td>conv5</td>
+            <td>7x7x64</td>
+            <td>/</td>
+        </tr>
+          <tr>
+            <td>fc1</td>
+            <td>512</td>
+            <td>/</td>
+        </tr>
+          <tr>
+            <td>fc2</td>
+            <td>512</td>
+            <td>/</td>
+        </tr>
+          <tr>
+            <td>fc3</td>
+            <td>10</td>
             <td>/</td>
         </tr>
 </table>
