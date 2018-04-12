@@ -1,7 +1,7 @@
 # fashion-mnist
 ## 介绍(Background)
 ------
-通过构建一个分类器，在Fashion-MNIST数据集上测试下。
+通过构建一个分类器，在[Fashion-MNIST数据集](https://github.com/zalandoresearch/fashion-mnist)上测试下。
 构建的网络模型包含5个conv层和3个fc层，网络各层参数见下表：
 <br>
 <table>
