@@ -2,8 +2,18 @@
 ## 介绍(Background)
 ------
 通过构建一个分类器，在Fashion-MNIST数据集上测试下。
-
-
+构建的网络模型包含五个卷积层和3个全连接层，网络各层参数见下表：
+<br>
+<table>
+<thead><tr><th>名称</th><th>特征图数量</th><th>核大小</th><th>说明</th></tr></thead>
+        <tr>
+            <td>输入图像</td>
+            <td>28x28x1</td>
+            <td>/</td>
+            <td>/</td>
+        </tr>
+</table>
+<br>
 
 ## 项目依赖(Requirement)
 -----
