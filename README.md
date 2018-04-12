@@ -3,6 +3,8 @@
 ------
 通过构建一个分类器，在Fashion-MNIST数据集上测试下。
 
+
+
 ## 项目依赖(Requirement)
 -----
 
@@ -19,4 +21,4 @@
 
 ## 实验环境(Experimental Enveriment)
 -----
-该项目在Windows 7 x64上运行，所用Tensorflow版本为1.4。因为是用CPU跑的，所以比较慢。
+该项目在Windows 7 x64上运行，所用Tensorflow版本为1.4。因为是用CPU跑的，比较慢，估计还没完全收敛。
