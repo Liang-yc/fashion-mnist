@@ -9,47 +9,47 @@
         <tr>
             <td>输入图像</td>
             <td>28x28x1</td>
-            <td>/</td>
+            <td>输入图像为灰度图像</td>
         </tr>
          <tr>
             <td>conv1</td>
             <td>28x28x64</td>
-            <td>/</td>
+            <td>每个conv层包含一个卷积层+relu层+max pooling层。曾使用过batch normalization，但是效果不好(可能是还没收敛，毕竟CPU实在太慢了，所以没使用)</td>
         </tr>
          <tr>
             <td>conv2</td>
             <td>28x28x64</td>
-            <td>/</td>
+            <td>同上</td>
         </tr>
          <tr>
             <td>conv3</td>
             <td>14x14x64</td>
-            <td>/</td>
+            <td>同上</td>
         </tr>
          <tr>
             <td>conv4</td>
             <td>14x14x64</td>
-            <td>/</td>
+            <td>同上</td>
         </tr>
          <tr>
             <td>conv5</td>
             <td>7x7x64</td>
-            <td>/</td>
+            <td>同上</td>
         </tr>
           <tr>
             <td>fc1</td>
             <td>512</td>
-            <td>/</td>
+            <td>一个fc层包含一个全连接层+relu层。fc1曾添加过dropout，但此处效果不好，因此最后弃用了。</td>
         </tr>
           <tr>
             <td>fc2</td>
             <td>512</td>
-            <td>/</td>
+            <td>同上</td>
         </tr>
           <tr>
             <td>fc3</td>
             <td>10</td>
-            <td>/</td>
+            <td>输出层</td>
         </tr>
 </table>
 <br>
