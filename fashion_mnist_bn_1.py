@@ -22,7 +22,7 @@ PIXEL_DEPTH = 255
 NUM_LABELS = 10
 SEED =0
 BATCH_SIZE = 100
-MAX_STEPS=7200
+MAX_STEPS=2400
 
 def error_rate(predictions, labels):
     """Return the error rate based on dense predictions and sparse labels."""
@@ -111,6 +111,7 @@ def main(_):
       labels = tf.placeholder(tf.int64, shape=(None,), name='Label')
 
       tst = tf.placeholder(tf.bool)
+      is_train=tf.placeholder(tf.bool)
       iter = tf.placeholder(tf.int32)
       keep_prob = tf.placeholder(tf.float32)
       # The variables below hold all the trainable weights.
@@ -125,9 +126,9 @@ def main(_):
                               conv1_weights,
                               strides=[1, 1, 1, 1],
                               padding='SAME')
-          convbn, update_ema1 = batchnorm(conv, tst, iter, conv1_biases , convolutional=True)
-          # conv=tf.nn.bias_add(conv, conv1_biases)
-          # convbn=tf.layers.batch_normalization(conv,training=tst)
+          # convbn, update_ema1 = batchnorm(conv, tst, iter, conv1_biases , convolutional=True)
+          conv=tf.nn.bias_add(conv, conv1_biases)
+          convbn=tf.layers.batch_normalization(conv,training=is_train)
           relu=tf.nn.relu(convbn)
           # conv_bn = batch_norm(conv, 64, is_train)
           # relu = tf.nn.relu(tf.nn.bias_add(conv_bn, conv1_biases))
@@ -148,8 +149,8 @@ def main(_):
                               strides=[1, 1, 1, 1],
                               padding='SAME')
           conv = tf.nn.bias_add(conv, conv2_biases)
-          convbn, update_ema2 = batchnorm(conv, tst, iter, conv2_biases , convolutional=True)
-          # convbn=tf.layers.batch_normalization(conv,training=tst)
+          # convbn, update_ema2 = batchnorm(conv, tst, iter, conv2_biases , convolutional=True)
+          convbn=tf.layers.batch_normalization(conv,training=is_train)
           relu=tf.nn.relu(convbn)
           # conv_bn = batch_norm(conv, 64, is_train)
           # relu = tf.nn.relu(tf.nn.bias_add(conv_bn, conv2_biases))
@@ -169,9 +170,9 @@ def main(_):
                               conv3_weights,
                               strides=[1, 1, 1, 1],
                               padding='SAME')
-          # conv = tf.nn.bias_add(conv, conv3_biases)
-          # convbn=tf.layers.batch_normalization(conv,training=tst)
-          convbn, update_ema3 = batchnorm(conv, tst, iter, conv3_biases , convolutional=True)
+          conv = tf.nn.bias_add(conv, conv3_biases)
+          convbn=tf.layers.batch_normalization(conv,training=is_train)
+          # convbn, update_ema3 = batchnorm(conv, tst, iter, conv3_biases , convolutional=True)
           relu=tf.nn.relu(convbn)
           # conv_bn = batch_norm(conv, 64, is_train)
           # relu = tf.nn.relu(tf.nn.bias_add(conv_bn, conv3_biases))
@@ -190,9 +191,9 @@ def main(_):
                               conv4_weights,
                               strides=[1, 1, 1, 1],
                               padding='SAME')
-          # conv = tf.nn.bias_add(conv, conv4_biases)
-          # convbn=tf.layers.batch_normalization(conv,training=tst)
-          convbn, update_ema4 = batchnorm(conv, tst, iter, conv4_biases , convolutional=True)
+          conv = tf.nn.bias_add(conv, conv4_biases)
+          convbn=tf.layers.batch_normalization(conv,training=is_train)
+          # convbn, update_ema4 = batchnorm(conv, tst, iter, conv4_biases , convolutional=True)
           relu=tf.nn.relu(convbn)
           # conv_bn = batch_norm(conv, 64, is_train)
           # relu = tf.nn.relu(tf.nn.bias_add(conv_bn, conv4_biases))
@@ -211,9 +212,9 @@ def main(_):
                               conv5_weights,
                               strides=[1, 1, 1, 1],
                               padding='SAME')
-          # conv = tf.nn.bias_add(conv, conv5_biases)
-          # convbn=tf.layers.batch_normalization(conv,training=tst)
-          convbn, update_ema5 = batchnorm(conv, tst, iter, conv5_biases , convolutional=True)
+          conv = tf.nn.bias_add(conv, conv5_biases)
+          convbn=tf.layers.batch_normalization(conv,training=is_train)
+          # convbn, update_ema5 = batchnorm(conv, tst, iter, conv5_biases , convolutional=True)
           relu=tf.nn.relu(convbn)
           # conv_bn = batch_norm(conv, 64, is_train)
           # relu = tf.nn.relu(tf.nn.bias_add(conv_bn, conv5_biases))
@@ -234,9 +235,11 @@ def main(_):
                                   seed=SEED,
                                   dtype=tf.float32))
           fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=tf.float32))
-          fc1 = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)
-      with tf.name_scope('dropout'):
-          drop = tf.nn.dropout(fc1, keep_prob)
+          fc1=tf.add(tf.matmul(reshape, fc1_weights),fc1_biases)
+          fc1=tf.layers.batch_normalization(fc1,training=is_train)
+          fc1 = tf.nn.relu(fc1)
+      # with tf.name_scope('dropout'):
+      #     drop = tf.nn.dropout(fc1, keep_prob)
       with tf.name_scope('fc2'):
           fc2_weights = tf.Variable(tf.truncated_normal([512, 512],
                                                         stddev=0.1,
@@ -244,9 +247,9 @@ def main(_):
                                                         dtype=tf.float32))
           fc2_biases = tf.Variable(tf.constant(
               0.1, shape=[512], dtype=tf.float32))
-          fc2 = tf.add(tf.matmul(drop, fc2_weights), fc2_biases)
+          fc2 = tf.add(tf.matmul(fc1, fc2_weights), fc2_biases)
           # fc2,update_em6=batchnorm(tf.matmul(drop,fc2_weights),tst,iter,fc2_biases)
-          fc2=tf.layers.batch_normalization(fc2,training=tst)
+          fc2=tf.layers.batch_normalization(fc2,training=is_train)
           fc2=tf.nn.relu(fc2)
       with tf.name_scope('fc3'):
           fc3_weights = tf.Variable(tf.truncated_normal([512, NUM_LABELS],
@@ -260,7 +263,7 @@ def main(_):
       # update_ema = tf.group(update_ema1, update_ema2, update_ema3, update_ema4,update_ema5,update_em6)
       # Training computation: logits + cross-entropy loss.
 
-      update_ema = tf.group(update_ema1, update_ema2, update_ema3, update_ema4)
+      # update_ema = tf.group(update_ema1, update_ema2, update_ema3, update_ema4)
       with tf.name_scope('Train'):
           loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
               labels=labels, logits=fc3_out))
@@ -271,9 +274,9 @@ def main(_):
           # Add the regularization term to the loss.
           loss += 5e-4 * regularizers
 
-          # extra_update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-          # with tf.control_dependencies(extra_update_ops):
-          optimizer = tf.train.AdamOptimizer(1e-4).minimize(loss)
+          extra_update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+          with tf.control_dependencies(extra_update_ops):
+              optimizer = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
       saver = tf.train.Saver()
       sess = tf.Session()
@@ -289,6 +292,7 @@ def main(_):
           print('Initialized!')
           # Loop through training steps.
           start_epoch = 0
+          # saver.restore(sess,"C:/Users/lenovo/Desktop/fashion-mnist-master/model_bn/model.ckpt-2400")
           checkpoint = tf.train.latest_checkpoint(FLAGS.model_dir)
           if checkpoint:
               saver.restore(sess, checkpoint)
@@ -301,20 +305,18 @@ def main(_):
               # batch_xs = train_data[offset:(offset + BATCH_SIZE)]
               # batch_ys = train_labels[offset:(offset + BATCH_SIZE)]
               # Run the optimizer to update weights.
-              loss_value,_,_=sess.run([loss, optimizer,update_ema],
+              loss_value,_=sess.run([loss, optimizer],
                               feed_dict = {data: batch_xs,
                                            labels: batch_ys,
                                            # is_train:True,
-                                           tst: False,
-                                           iter: step,
-                                           keep_prob: 1.0})
+                                           is_train: True})
 
 
               # Save Model
               if step %100 == 0:
                   print('Step: %d: loss: %.6f.' % (step, loss_value))
                   sys.stdout.flush()
-                  checkpoint_file = os.path.join('model_bn', 'model.ckpt')
+                  checkpoint_file = os.path.join(FLAGS.model_dir, 'model.ckpt')
                   saver.save(sess, checkpoint_file, global_step=step)
                   # print('shuffle training data')
                   # perm = numpy.arange(len(train_data))
@@ -342,9 +344,7 @@ def main(_):
                   feed_dict={data: batch_xs,
                              labels: batch_ys,
                              # is_train:False,
-                             tst: True,
-                             # iter: 0,
-                             keep_prob: 1.0})
+                             is_train: False})
               elapsed = timeit.default_timer() - start_time
               av_time = av_time + elapsed
 
