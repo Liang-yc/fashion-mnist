@@ -1,7 +1,7 @@
 # fashion-mnist
 ## 2018.5.4更新(update)
 ------
-新增文件`fashion_mnist_bn.py`和`fashion_mnist_bn_1.py`，在原网络的基础上添加了batch norm。`fashion_mnist_bn.py`用的bn函数是tf.nn.batch_normalization，代码参考了[这里]()。`fashion_mnist_bn_1.py`用的是tensorflow 高级API tf.layers.batch_normalization，相对好用。当然都不提高准确率。后续有空会用其他模型做训练测试。上次是用CPU做的训练，用不了太好的模型，而简单模型的准确率也就90%左右。这个故事告诉我们GPU是DL的标配。
+新增文件`fashion_mnist_bn.py`和`fashion_mnist_bn_1.py`，在原网络的基础上添加了batch norm。`fashion_mnist_bn.py`用的bn函数是tf.nn.batch_normalization，代码参考了[这里](https://github.com/martin-gorner/tensorflow-mnist-tutorial/blob/master/mnist_4.2_batchnorm_convolutional.py)。`fashion_mnist_bn_1.py`用的是tensorflow 高级API tf.layers.batch_normalization，相对好用。当然都不提高准确率。后续有空会用其他模型做训练测试。上次是用CPU做的训练，用不了太好的模型，而简单模型的准确率也就90%左右。这个故事告诉我们GPU是DL的标配。
 ## 介绍(Background)
 ------
 通过构建一个分类器，在[Fashion-MNIST数据集](https://github.com/zalandoresearch/fashion-mnist)上测试下。
